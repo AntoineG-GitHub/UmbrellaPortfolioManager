@@ -1,5 +1,9 @@
 from typing import List
-from pydantic import BaseModel
 
-class Portfolio(BaseModel):
-    owner: str
+class Portfolio:
+    
+    def __init__(self) -> None:
+        self.holders = []
+
+    def add_holder(self):
+        pass
