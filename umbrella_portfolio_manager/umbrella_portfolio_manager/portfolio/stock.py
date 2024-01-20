@@ -10,9 +10,9 @@ class Stock:
     def __init__(self, ticker) -> None:
         self.ticker = ticker
         self.stock = yf.Ticker(ticker)
-        self.load_metadata()
+        self._load_metadata()
         self.transactions = pd.DataFrame(columns=['ticker', 'buying_date', 'buying_price', 'quantity'])
-        self.load_ohlcv_history()
+        self._load_ohlcv_history()
 
     def _load_metadata(self) -> None:
         """
