@@ -13,6 +13,7 @@ class Stock:
         self._load_metadata()
         self.transactions = pd.DataFrame(columns=['ticker', 'buying_date', 'buying_price', 'quantity'])
         self._load_ohlcv_history()
+        self.quantity = 0
 
     def _load_metadata(self) -> None:
         """
