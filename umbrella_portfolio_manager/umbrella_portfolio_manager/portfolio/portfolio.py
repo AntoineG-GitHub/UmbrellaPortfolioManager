@@ -1,13 +1,15 @@
-import pandas as pd 
+import pandas as pd
+
+from umbrella_portfolio_manager.umbrella_portfolio_manager.portfolio.holders import Holders 
 
 class Portfolio:
     
     def __init__(self, id) -> None:
         self.id = id
         self.total_value = 0
-        self.holders = []
+        self.holders = {}
         self.portfolio = []
-        self.stock_transactions = pd.DataFrame(columns=['date', 'ticker', 'transactions_date', 'quantity', 
+        self.stock_transactions = pd.DataFrame(columns=['ticker', 'transactions_date', 'quantity', 
                                                         'transaction_price', 'conversation_rate', 
                                                         'transaction_price_euro', 'charge'])
         
@@ -23,12 +25,21 @@ class Portfolio:
     def update_holders_benefits(self):
         pass
 
-    def update_holders_transactions(self):
-        pass
+    def update_holders_transactions(self, holder_id, date, amount: float):
+        self.holders[holder_id].add_transaction(date, amount)
 
-    def add_holder(self):
-        pass
+    def add_holder(self, holder_id):
+        if holder_id not in self.holders.keys():
+            self.holders[holder_id] = Holders(holder_id)
+        else: 
+            #update the current holder
+            pass
 
     def add_stock_transactions(self, ticker: str, date, quantity: int, transaction_price: float,
                                conversation_rate: float, transaction_price_euro: float, charge: float):
-        pass
+        
+        # Call Stock function to update the whole object
+        new_stocks = pd.DataFrame([{'ticker': ticker, 'transactions_date': date, 'quantity': quantity, 
+                                                        'transaction_price': transaction_price, 'conversation_rate': conversation_rate, 
+                                                        'transaction_price_euro': transaction_price_euro, 'charge':charge}])
+        self.stock_transactions = pd.concat([self.stock_transactions, new_stocks])
