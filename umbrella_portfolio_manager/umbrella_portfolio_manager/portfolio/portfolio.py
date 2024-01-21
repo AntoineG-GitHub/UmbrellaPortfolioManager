@@ -49,6 +49,5 @@ class Portfolio:
                                                         'transaction_price': transaction_price, 'conversation_rate': conversation_rate, 
                                                         'transaction_price_euro': transaction_price_euro, 'charge':charge}])
         self.stock_transactions = pd.concat([self.stock_transactions, new_stocks])
-
-        #update portfolio 
+ 
         self.update_portfolio(ticker, quantity)

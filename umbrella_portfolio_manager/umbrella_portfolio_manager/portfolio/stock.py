@@ -10,10 +10,12 @@ class Stock:
     def __init__(self, ticker) -> None:
         self.ticker = ticker
         self.stock = yf.Ticker(ticker)
+        self.minute_price = 0
         self._load_metadata()
-        self.transactions = pd.DataFrame(columns=['ticker', 'buying_date', 'buying_price', 'quantity'])
+        # self.transactions = pd.DataFrame(columns=['ticker', 'buying_date', 'buying_price', 'quantity'])
         self._load_ohlcv_history()
-        self.quantity = 0
+        self.update_minute_price()
+        
 
     def _load_metadata(self) -> None:
         """
@@ -51,7 +53,8 @@ class Stock:
         pass
 
     def update_minute_price(self):
-        pass
+         
+         self.minute_price = self.stock.history(period='1d')['Close'].iloc[-1]
 
     def add_transaction(buying_date, buying_price, quantity):
         pass
