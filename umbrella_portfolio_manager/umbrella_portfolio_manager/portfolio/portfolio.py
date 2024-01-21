@@ -8,13 +8,19 @@ class Portfolio:
         self.id = id
         self.total_value = 0
         self.holders = {}
-        self.portfolio = []
+        self.portfolio = {}
         self.stock_transactions = pd.DataFrame(columns=['ticker', 'transactions_date', 'quantity', 
                                                         'transaction_price', 'conversation_rate', 
                                                         'transaction_price_euro', 'charge'])
         
     def load_total_value(self):
         pass
+
+    def update_portfolio(self, ticker: str, quantity: int): 
+        if ticker in self.portfolio.keys():
+           self.portfolio[ticker] += quantity
+        else :
+            self.portfolio[ticker]= quantity
 
     def update_total_value(self):
         pass
@@ -43,3 +49,6 @@ class Portfolio:
                                                         'transaction_price': transaction_price, 'conversation_rate': conversation_rate, 
                                                         'transaction_price_euro': transaction_price_euro, 'charge':charge}])
         self.stock_transactions = pd.concat([self.stock_transactions, new_stocks])
+
+        #update portfolio 
+        self.update_portfolio(ticker, quantity)
