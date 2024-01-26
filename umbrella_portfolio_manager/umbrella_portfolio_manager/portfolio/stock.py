@@ -4,13 +4,15 @@ import datetime
 
 class Stock:
     """Class that gathers information about the stock present in the portfolio; 
-    Information is translated by the stock price history, the quantity, the buying dates, etc. 
+    Information is translated by the stock price history, the quantity, the buying dates, the profit, etc. 
     """
 
-    def __init__(self, ticker) -> None:
+    def __init__(self, ticker, quantity) -> None:
         self.ticker = ticker
         self.stock = yf.Ticker(ticker)
         self.minute_price = 0
+        self.quantity = quantity
+        self.profit = 0
         self._load_metadata()
         # self.transactions = pd.DataFrame(columns=['ticker', 'buying_date', 'buying_price', 'quantity'])
         self._load_ohlcv_history()
@@ -58,3 +60,6 @@ class Stock:
 
     def add_transaction(buying_date, buying_price, quantity):
         pass
+
+    def update_quantity(self, quantity):
+        self.quantity += quantity

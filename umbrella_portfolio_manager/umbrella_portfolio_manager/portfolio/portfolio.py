@@ -1,6 +1,7 @@
 import pandas as pd
 
-from umbrella_portfolio_manager.umbrella_portfolio_manager.portfolio.holders import Holders 
+from umbrella_portfolio_manager.umbrella_portfolio_manager.portfolio.holders import Holders
+from umbrella_portfolio_manager.umbrella_portfolio_manager.portfolio.stock import Stock 
 
 class Portfolio:
     
@@ -9,6 +10,7 @@ class Portfolio:
         self.total_value = 0
         self.holders = {}
         self.portfolio = {}
+        self.stocks = {}
         self.stock_transactions = pd.DataFrame(columns=['ticker', 'transactions_date', 'quantity', 
                                                         'transaction_price', 'conversation_rate', 
                                                         'transaction_price_euro', 'charge'])
@@ -43,8 +45,11 @@ class Portfolio:
 
     def add_stock_transactions(self, ticker: str, date, quantity: int, transaction_price: float,
                                conversation_rate: float, transaction_price_euro: float, charge: float):
+        if ticker in self.stocks.keys():
+            self.stock[ticker].update_quantity(quantity)
+        else: 
+            self.stocks[ticker] = Stock(ticker = ticker, quantity = quantity)
         
-        # Call Stock function to update the whole object
         new_stocks = pd.DataFrame([{'ticker': ticker, 'transactions_date': date, 'quantity': quantity, 
                                                         'transaction_price': transaction_price, 'conversation_rate': conversation_rate, 
                                                         'transaction_price_euro': transaction_price_euro, 'charge':charge}])
