@@ -52,12 +52,12 @@ class Portfolio:
         self.stocks[ticker].add_transaction(date, quantity, transaction_price,
                                conversation_rate, transaction_price_euro, charge)
        
-
-
         self.update_portfolio(ticker, quantity)
 
-    def portfolio_history(self):
-        pass
+    def update_all_history(self):
+        periods = self.portfolio_transactions['transaction_date'].unique
+        print(periods)
+        
 
     def update_portfolio_evolution(self):
         pass
