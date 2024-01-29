@@ -11,24 +11,19 @@ class Portfolio:
         self.holders = {}
         self.portfolio = {}
         self.stocks = {}
-        self.stock_transactions = pd.DataFrame(columns=['ticker', 'transactions_date', 'quantity', 
+        self.portfolio_transactions = pd.DataFrame(columns=['ticker', 'transactions_date', 'quantity', 
                                                         'transaction_price', 'conversation_rate', 
                                                         'transaction_price_euro', 'charge'])
         
-    def load_total_value(self):
-        pass
+    def update_total_value(self):
+        for value in self.stocks.values() :
+            self.total_value =+ value.quantity*value.minute_price        
 
     def update_portfolio(self, ticker: str, quantity: int): 
         if ticker in self.portfolio.keys():
            self.portfolio[ticker] += quantity
         else :
             self.portfolio[ticker]= quantity
-
-    def update_total_value(self):
-        pass
-
-    def load_holders_benefits(self):
-        pass
 
     def update_holders_benefits(self):
         pass
@@ -46,13 +41,25 @@ class Portfolio:
     def add_stock_transactions(self, ticker: str, date, quantity: int, transaction_price: float,
                                conversation_rate: float, transaction_price_euro: float, charge: float):
         if ticker in self.stocks.keys():
-            self.stock[ticker].update_quantity(quantity)
+            self.stocks[ticker].update_quantity(quantity)
         else: 
             self.stocks[ticker] = Stock(ticker = ticker, quantity = quantity)
         
         new_stocks = pd.DataFrame([{'ticker': ticker, 'transactions_date': date, 'quantity': quantity, 
                                                         'transaction_price': transaction_price, 'conversation_rate': conversation_rate, 
                                                         'transaction_price_euro': transaction_price_euro, 'charge':charge}])
-        self.stock_transactions = pd.concat([self.stock_transactions, new_stocks])
- 
+        self.portfolio_transactions = pd.concat([self.portfolio_transactions, new_stocks])
+        self.stocks[ticker].add_transaction(date, quantity, transaction_price,
+                               conversation_rate, transaction_price_euro, charge)
+       
+
+
         self.update_portfolio(ticker, quantity)
+
+    def portfolio_history(self):
+        pass
+
+    def update_portfolio_evolution(self):
+        pass
+
+    

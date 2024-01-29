@@ -13,6 +13,12 @@ class Stock:
         self.minute_price = 0
         self.quantity = quantity
         self.profit = 0
+        self.stock_transactions = pd.DataFrame(columns=['transactions_date', 'quantity', 
+                                                        'transaction_price', 'conversation_rate', 
+                                                        'transaction_price_euro', 'charge'])
+        self.dict_evolution = {}
+
+
         self._load_metadata()
         # self.transactions = pd.DataFrame(columns=['ticker', 'buying_date', 'buying_price', 'quantity'])
         self._load_ohlcv_history()
@@ -58,8 +64,68 @@ class Stock:
          
          self.minute_price = self.stock.history(period='1d')['Close'].iloc[-1]
 
-    def add_transaction(buying_date, buying_price, quantity):
+    def add_transaction(self, date, quantity: int, transaction_price: float,
+                               conversation_rate: float, transaction_price_euro: float, charge: float):
+        new_stock = pd.DataFrame([{ 'transactions_date': date, 'quantity': quantity, 
+                                                        'transaction_price': transaction_price, 'conversation_rate': conversation_rate, 
+                                                        'transaction_price_euro': transaction_price_euro, 'charge':charge}])
+        self.stock_transactions = pd.concat([self.stock_transactions, new_stock])
+
+        self.dict_evolution[date] = pd.DataFrame([{"date": date, "quantity": self.quantity, "price" : transaction_price, 
+                                                   'transaction_price_euro' : transaction_price_euro, 'conversation_rate': conversation_rate}])
+        self.dict_evolution[date].index = self.dict_evolution[date]["date"]
+        
+    def update_dict_evolution() :
         pass
+
+    def update_dict_evolution_historic(self, date_start, date_end, quantity) :
+        # get prices between start and end 
+        # get conversion rate between start and end 
+        # get quantity 
+        # compute euro price 
+        symbol_eur_usd = "EURUSD=X"
+        forex = yf.Ticker(symbol_eur_usd)
+
+        price_history = self.stock.history(start= date_start , end=date_end)
+        closing_price = price_history["Close"]
+        closing_price.index = closing_price.index.date
+        print(closing_price.head())
+
+        forex_data = forex.history(start=date_start, end=date_end)
+        
+        closing_conversion_rate = forex_data["Close"]
+        closing_conversion_rate.index = closing_conversion_rate.index.date
+        print(closing_conversion_rate.head())
+        
+        
+
+
+
+        merged_data = pd.merge(closing_price, closing_conversion_rate, left_index=True, right_index=True)   
+        merged_data['result_Close_x_y'] = merged_data['Close_x'] / merged_data['Close_y']
+        merged_data['quantity'] = self.quantity
+        #merged_data['total'] = merged_data['quantity'] * merged_data['result_Close_x_y']
+        print(merged_data.head())
+
+        merged_data.columns=["price","conversation_rate","transaction_price_euro","quantity" ]
+        print(merged_data.head())
+
+     
+        
+        
+        self.dict_evolution[date_start] = pd.concat([self.dict_evolution[date_start], merged_data])
+
+        #     current_date += timedelta(days=1)
+        # print
+
+
+
+
+
+
+
+
+        
 
     def update_quantity(self, quantity):
         self.quantity += quantity
