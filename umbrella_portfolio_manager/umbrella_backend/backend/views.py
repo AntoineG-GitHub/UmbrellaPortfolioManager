@@ -1,7 +1,8 @@
 from django.contrib.auth.models import Group, User
 from rest_framework import permissions, viewsets
 
-from backend.serializers import GroupSerializer, UserSerializer
+from backend.serializers import GroupSerializer, PortfolioSerializer, StockMetadataSerializer, StockPortfolioSerializer, UserSerializer
+from backend.models import Portfolio, Stock_Metadata, Stock_Portfolio
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -20,3 +21,16 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
+class PortfolioViewSet(viewsets.ModelViewSet):
+    queryset = Portfolio.objects.all()
+    serializer_class= PortfolioSerializer
+    permission_classes = [permissions.AllowAny]
+class StockMetadataViewSet(viewsets.ModelViewSet):
+    queryset = Stock_Metadata.objects.all()
+    serializer_class = StockMetadataSerializer
+    permission_classes = [permissions.AllowAny]
+
+class StockPortfolioViewSet(viewsets.ModelViewSet):
+    queryset = Stock_Portfolio.objects.all()
+    serializer_class = StockPortfolioSerializer
+    permission_classes = [permissions.AllowAny]
