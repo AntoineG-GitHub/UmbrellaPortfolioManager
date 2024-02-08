@@ -20,7 +20,12 @@ class PortfolioSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Portfolio
-        fields = ['name',   'users']
+        fields = '__all__'
+        
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        print(UserSerializer(instance.name).data)
+        return rep
 class StockMetadataSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Stock_Metadata
