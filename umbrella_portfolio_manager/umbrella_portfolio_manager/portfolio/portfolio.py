@@ -55,8 +55,21 @@ class Portfolio:
         self.update_portfolio(ticker, quantity)
 
     def update_all_history(self):
-        periods = self.portfolio_transactions['transaction_date'].unique
+        history_stocks = {}
+        periods = self.portfolio_transactions['transactions_date'].unique()
         print(periods)
+        for index, row in self.portfolio_transactions.iterrows():
+            if row['ticker'] in history_stocks.keys():
+                history_stocks[row['ticker']].update_quantity(row['quantity'])
+            else: 
+                history_stocks[row['ticker']] = Stock(ticker = row['ticker'], quantity = row['quantity'])
+            history_stocks[row['ticker']].update_dict_evolution_historic(date_start = row['transactions_date'], date_end = '2024-01-01')
+        print(index, row)
+
+        for date in periods: 
+            pass
+        # pour chaque date dans les periodes, on recrée une table 
+        # d'historique pour chaque stock de la transaction 
         
 
     def update_portfolio_evolution(self):

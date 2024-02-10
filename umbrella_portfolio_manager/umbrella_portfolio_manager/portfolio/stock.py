@@ -82,7 +82,7 @@ class Stock:
         self.stock_transactions = pd.concat([self.stock_transactions, new_stock])
 
         self.dict_evolution[date] = pd.DataFrame([{"date": date, "quantity": self.quantity, "price" : transaction_price, 
-                                                   'transaction_price_euro' : transaction_price_euro, 'conversation_rate': conversation_rate}])
+                                                   'transaction_price_euro' : transaction_price_euro, 'conversion_rate': conversation_rate}])
         self.dict_evolution[date].index = self.dict_evolution[date]["date"]
         self.dict_evolution[date] = self.dict_evolution[date].drop('date', axis=1)
         
