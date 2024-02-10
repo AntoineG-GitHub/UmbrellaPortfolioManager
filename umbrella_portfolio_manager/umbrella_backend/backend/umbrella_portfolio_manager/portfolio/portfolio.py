@@ -50,12 +50,13 @@ class Portfolio:
                                                         'transaction_price': transaction_price, 'conversation_rate': conversation_rate, 
                                                         'transaction_price_euro': transaction_price_euro, 'charge':charge}])
         self.portfolio_transactions = pd.concat([self.portfolio_transactions, new_stocks])
+        
         self.stocks[ticker].add_transaction(date, quantity, transaction_price,
                                conversation_rate, transaction_price_euro, charge)
        
         self.update_portfolio(ticker, quantity)
 
-    def update_all_history(self):
+    def update_all_history(self, date_end):
         history_stocks = {}
         periods = self.portfolio_transactions['transactions_date'].unique()
         print(periods)
