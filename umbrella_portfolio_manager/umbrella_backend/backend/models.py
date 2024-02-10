@@ -3,7 +3,8 @@ from django.db import models
     
 class Portfolio(models.Model):
     name = models.CharField(max_length=100, null=False, default="default")     
-class User(User):
+class Holder(models.Model):
+    user =models.OneToOneField(User, on_delete=models.CASCADE)
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
 class Stock_Metadata(models.Model):
     ticker = models.CharField(max_length=100, primary_key=True)
@@ -23,7 +24,7 @@ class Stock_price(models.Model):
     price = models.FloatField(null=False)
     currency = models.CharField(max_length=100, null=False)
 class Actors_portfolio(models.Model):
-    actor = models.ForeignKey(User, on_delete=models.CASCADE)
+    actor = models.ForeignKey(Holder, on_delete=models.CASCADE)
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
     total_amount = models.FloatField(null=False)
 class Portfolio_Evolution(models.Model):
@@ -32,12 +33,12 @@ class Portfolio_Evolution(models.Model):
     total_value = models.FloatField(null=False)
     total_profit = models.FloatField(null=False)
 class Actor_profit_Evolution(models.Model):
-    actor = models.ForeignKey(User, on_delete=models.CASCADE)
+    actor = models.ForeignKey(Holder, on_delete=models.CASCADE)
     date = models.DateField()
     total_profit = models.FloatField(null=False)
     holding_percentage = models.FloatField(null=False)
 class Actors_transaction(models.Model):
-    id_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    id_user = models.ForeignKey(Holder, on_delete=models.CASCADE)
     amount = models.FloatField(null=False)
     transaction_date = models.DateField()
     portfolio_id = models.ForeignKey(Actors_portfolio, on_delete=models.CASCADE)

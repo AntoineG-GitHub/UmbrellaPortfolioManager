@@ -1,13 +1,17 @@
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group,User
 from rest_framework import permissions, viewsets
 
-from backend.serializer import Actors_transactionSerializer, GroupSerializer, PortfolioSerializer, StockMetadataSerializer, StockPortfolioSerializer, UserSerializer, Stock_transactionsSerializer, Stock_priceSerializer, Actors_portfolioSerializer, Portfolio_EvolutionSerializer, Actor_profit_EvolutionSerializer, Actors_transactionSerializer
-from backend.models import Actors_transaction, Portfolio, Stock_Metadata, Stock_Portfolio, Stock_transactions, Stock_price, Actors_portfolio, Portfolio_Evolution, Actor_profit_Evolution, Actors_transaction
+from backend.serializer import Actors_transactionSerializer, GroupSerializer, HolderSerializer, PortfolioSerializer, StockMetadataSerializer, StockPortfolioSerializer, Stock_transactionsSerializer, Stock_priceSerializer, Actors_portfolioSerializer, Portfolio_EvolutionSerializer, Actor_profit_EvolutionSerializer, Actors_transactionSerializer, UserSerializer
+from backend.models import Holder,Actors_transaction, Portfolio, Stock_Metadata, Stock_Portfolio, Stock_transactions, Stock_price, Actors_portfolio, Portfolio_Evolution, Actor_profit_Evolution, Actors_transaction
 
 
-class UserViewSet(viewsets.ModelViewSet):    
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+class HolderViewSet(viewsets.ModelViewSet):    
+    queryset = Holder.objects.all()
+    serializer_class = HolderSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 class GroupViewSet(viewsets.ModelViewSet):    

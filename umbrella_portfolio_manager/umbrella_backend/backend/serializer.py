@@ -1,21 +1,21 @@
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group,User
 from rest_framework import serializers
 
-from backend.models import User,Actors_transaction, Portfolio, Stock_Metadata, Stock_Portfolio, Stock_transactions, Stock_price, Actors_portfolio, Portfolio_Evolution, Actor_profit_Evolution, Actors_transaction
+from backend.models import Holder,Actors_transaction, Portfolio, Stock_Metadata, Stock_Portfolio, Stock_transactions, Stock_price, Actors_portfolio, Portfolio_Evolution, Actor_profit_Evolution, Actors_transaction
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer, serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['id','url', 'username', 'email', 'groups','portfolio']
+        fields = ['url', 'username', 'email', 'groups']
+class HolderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Holder
+        fields = ['user','portfolio']
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ['url', 'name']
-class UserSerializerforPortfolio(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username']
 class PortfolioSerializer(serializers.HyperlinkedModelSerializer):
     
 
