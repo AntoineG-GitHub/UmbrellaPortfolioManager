@@ -115,7 +115,11 @@ class Stock:
         merged_data = pd.merge(closing_price, closing_conversion_rate, left_index=True, right_index=True) 
         merged_data['transaction_price_euro'] = merged_data['price'] / merged_data['conversion_rate']
         merged_data['quantity'] = self.quantity      
-        self.dict_evolution[date_start] = pd.concat([self.dict_evolution[date_start], merged_data])        
+        if date_start in self.dict_evolution.keys() : 
+            self.dict_evolution[date_start] = pd.concat([self.dict_evolution[date_start], merged_data])
+        else :
+            self.dict_evolution[date_start] =  merged_data
+
 
     def update_quantity(self, quantity):
         self.quantity += quantity
