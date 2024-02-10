@@ -1,6 +1,6 @@
 import pandas as pd
 
-from umbrella_portfolio_manager.umbrella_portfolio_manager.portfolio.holders import Holders 
+from portfolio.holders import Holders 
 
 class Portfolio:
     
