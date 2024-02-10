@@ -1,8 +1,8 @@
 import pandas as pd
 
 from portfolio.holders import Holders 
-from umbrella_portfolio_manager.umbrella_portfolio_manager.portfolio.holders import Holders
-from umbrella_portfolio_manager.umbrella_portfolio_manager.portfolio.stock import Stock 
+from portfolio.holders import Holders
+from portfolio.stock import Stock 
 
 class Portfolio:
     
