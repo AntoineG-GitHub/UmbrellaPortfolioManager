@@ -17,8 +17,6 @@ class Stock:
                                                         'transaction_price', 'conversation_rate', 
                                                         'transaction_price_euro', 'charge'])
         self.dict_evolution = {}
-
-
         self._load_metadata()
         self.exchange_ticker = yf.Ticker(self._find_exchange_ticker())
         # self.transactions = pd.DataFrame(columns=['ticker', 'buying_date', 'buying_price', 'quantity'])
@@ -76,6 +74,30 @@ class Stock:
 
     def add_transaction(self, date, quantity: int, transaction_price: float,
                                conversation_rate: float, transaction_price_euro: float, charge: float):
+        """
+        Adds a new stock transaction record and updates the evolution of stock transactions over time.
+
+        This method creates a new record of a stock transaction, incorporating it into the existing dataset of transactions. 
+        Additionally, it updates the historical record of transactions to reflect the new state post-transaction.
+
+        Parameters:
+            - date (datetime-like): The date of the transaction.
+            - quantity (int): The number of shares involved in the transaction.
+            - transaction_price (float): The price per share of the transaction in the original currency.
+            - conversation_rate (float): The exchange rate from the original currency to Euros at the time of the transaction.
+            - transaction_price_euro (float): The price per share of the transaction in Euros, calculated externally.
+            - charge (float): Any additional charges associated with the transaction.
+
+        The method updates two main attributes of the class:
+            1. `stock_transactions`: A pandas DataFrame that logs each transaction with details such as date, quantity, prices, and charges.
+            2. `dict_evolution`: A dictionary where each key is a date and its value is a DataFrame representing the cumulative state of transactions up to that date. This includes the total quantity of shares and their price information in both the original currency and Euros, adjusted for the conversion rate.
+
+        Note:
+            - This method assumes that the class has `stock_transactions` and `dict_evolution` attributes initialized before it is called.
+            - The exchange rate (`conversation_rate`) is meant for conversion to Euros, and both `transaction_price` and `transaction_price_euro` should reflect the same transaction in different currencies.
+            - The method does not return any value but updates the class's state.
+        """
+    
         new_stock = pd.DataFrame([{ 'transactions_date': date, 'quantity': quantity, 
                                                         'transaction_price': transaction_price, 'conversation_rate': conversation_rate, 
                                                         'transaction_price_euro': transaction_price_euro, 'charge':charge}])

@@ -29,12 +29,17 @@ class Portfolio:
     def update_holders_benefits(self):
         pass
 
-    def update_holders_transactions(self, holder_id, date, amount: float):
+    def add_holders_transactions(self, holder_id, date, amount: float):
+        if holder_id in self.holders.keys():
+            self.holders[holder_id].update_holder_amount(amount)
+        else: 
+            self.holders[holder_id] = Holders(id = holder_id, amount = amount)
+
         self.holders[holder_id].add_transaction(date, amount)
 
-    def add_holder(self, holder_id):
+    def add_holder(self, holder_id, amount):
         if holder_id not in self.holders.keys():
-            self.holders[holder_id] = Holders(holder_id)
+            self.holders[holder_id] = Holders(holder_id, amount)
         else: 
             #update the current holder
             pass
