@@ -1,47 +1,54 @@
 import pandas as pd
 
 class Holders: 
+    """
+    Represents holders in portfolios.
+    """
 
-    def __init__(self, id, amount) -> None:
+    def __init__(self, id) -> None:
+        """
+        Initializes a Holders instance based on the id.
+
+        Args:
+        - id: Identifier for the holders.
+        """
         self.id = id
-        self.amount = amount
-        self.holding_history = {}
+        self.amount = 0
         self.transactions = pd.DataFrame(columns=['date', 'amount'])
-        self.dict_evolution = {}
+        self.evolution = pd.DataFrame(columns=['amount']).rename_axis('date')
     
     def add_transaction(self, date, amount: float):
-        new_transaction = pd.DataFrame([{'date': date, 'amount': amount}])
-        self.transactions = pd.concat([self.transactions, new_transaction])
-        
-        self.holding_history[date] = pd.DataFrame([{'date': date, 'amount': amount}])
-        self.holding_history[date].index = self.holding_history[date]["date"]
-        self.holding_history[date] = self.holding_history[date].drop('date', axis=1)
+        """
+        Adds a transaction to the holder's record.
+        This will update the transactions table and the evolution table as well as the amount parameter.
 
-    def update_holder_amount(self, amount):
+        Args:
+        - date: Date of the transaction.
+        - amount: Amount of the transaction.
+        """
+        new_transaction = pd.DataFrame([{'date': date, 'amount': amount}])
+        new_holdings = pd.DataFrame({'amount': self.amount+amount}, index=[pd.to_datetime(date)])
+        self.transactions = pd.concat([self.transactions, new_transaction])
+        self.evolution = pd.concat([self.evolution, new_holdings])
+        self.update_holder_amount(amount)
+
+    def update_holder_amount(self, amount): 
+        """
+        Updates the current total amount held by the holder.
+
+        Args:
+        - amount: Amount to be added or subtracted.
+        """
         self.amount += amount
 
     def update_dict_evolution_historic(self, date_start, date_end) :
         """
-        Update the historical evolution of a stock in the dictionary `dict_evolution`.
-
-        This function retrieves historical data for both the stock price and the currency conversion rate
-        for a specified date range. It then calculates the transaction price in euros and updates the 
-        `dict_evolution` attribute with this information.
+        Updates the historic evolution of the holder's holdings.
 
         Args:
-            date_start (str or datetime): The start date for fetching historical data.
-            date_end (str or datetime): The end date for fetching historical data.
-
-        Returns:
-            None: This function updates the `dict_evolution` attribute in-place.
+        - date_start: Start date for the historic evolution.
+        - date_end: End date for the historic evolution.
         """
-        # Create a DataFrame with a date range
         dates = pd.date_range(start=date_start, end=date_end, freq='D')
-        # Create a DataFrame with dates and repeated amount
-        data = {'date': dates, 'amount': self.amount}
-        df = pd.DataFrame(data)
-   
-        if date_start in self.dict_evolution.keys() : 
-            self.dict_evolution[date_start] = pd.concat([self.dict_evolution[date_start], df])
-        else :
-            self.dict_evolution[date_start] =  df
+        df = pd.DataFrame({'amount': self.amount}, index=dates)
+        self.evolution = pd.concat([self.evolution, df])
