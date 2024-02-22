@@ -5,7 +5,7 @@ class Portfolio(models.Model):
     name = models.CharField(max_length=100, null=False, default="default")     
 class Holder(models.Model):
     user =models.OneToOneField(User, on_delete=models.CASCADE)
-    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
+    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE,null=True, blank=True)
 class Stock_Metadata(models.Model):
     ticker = models.CharField(max_length=100, primary_key=True)
     name = models.CharField(max_length=100, null=False)

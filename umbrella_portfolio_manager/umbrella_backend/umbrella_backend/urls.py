@@ -22,6 +22,7 @@ router.register(r'actors-transaction', views.Actors_transactionViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    
 ]
 
 urlpatterns += router.urls
