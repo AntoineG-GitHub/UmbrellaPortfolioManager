@@ -35,7 +35,7 @@ class Portfolio:
         
         if holder_id in self.holders.keys():
             self.holders[holder_id].add_transaction(date, amount)
-            self.holders[holder_id].update_holder_amount(amount)
+            # self.holders[holder_id].update_holder_amount(amount) # pas besoin car déjà fait coté class de holder! 
         else: 
             self.holders[holder_id] = Holders(id = holder_id)
             self.holders[holder_id].add_transaction(date, amount)
@@ -45,7 +45,7 @@ class Portfolio:
         pass
 
     def compute_holders_percentage_historic(self):
-        total_table = pd.DataFrame()
+        self.holders_percentage_historic = pd.DataFrame()
 
         for id, holder in self.holders.items():
             # Copy the DataFrame to avoid modifying the original DataFrame in holder.evolution
@@ -62,20 +62,19 @@ class Portfolio:
             # If 'date' is a column and you want it in every chunk of the DataFrame, ensure it's included or managed as an index
             
             # Concatenate with the total_table
-            if total_table.empty:
-                total_table = temp_df
+            if self.holders_percentage_historic.empty:
+                self.holders_percentage_historic = temp_df
             else:
                 # Use axis=1 to concatenate column-wise
-                total_table = pd.concat([total_table, temp_df], axis=1)
+                self.holders_percentage_historic = pd.concat([self.holders_percentage_historic, temp_df], axis=1)
         
         # Calculate the total amount across all 'amount_{id}' columns
-        total_table['total_amount'] = total_table.filter(like='amount').sum(axis=1)
+        self.holders_percentage_historic['total_amount'] = self.holders_percentage_historic.filter(like='amount').sum(axis=1)
 
         # Calculate the percentage that each 'amount_{id}' represents in its own column
         for id in self.holders.keys():
-            total_table[f'percentage_{id}'] = (total_table[f'amount_{id}'] / total_table['total_amount']) * 100
+            self.holders_percentage_historic[f'percentage_{id}'] = (self.holders_percentage_historic[f'amount_{id}'] / self.holders_percentage_historic['total_amount']) * 100
 
-        print(total_table)
             
     def add_stock_transactions(self, ticker: str, date, quantity: int, transaction_price: float,
                                conversation_rate: float, transaction_price_euro: float, charge: float):
