@@ -13,6 +13,8 @@ class Portfolio:
         self.holders_percenatge = {}
         self.portfolio = {}
         self.stocks = {}
+        self.dict_evolution = {}
+        self.periods = []
         self.portfolio_transactions = pd.DataFrame(columns=['ticker', 'transactions_date', 'quantity', 
                                                         'transaction_price', 'conversation_rate', 
                                                         'transaction_price_euro', 'charge'])
@@ -78,6 +80,8 @@ class Portfolio:
             
     def add_stock_transactions(self, ticker: str, date, quantity: int, transaction_price: float,
                                conversation_rate: float, transaction_price_euro: float, charge: float):
+        if date not in self.periods:
+            self.periods.append(date)
         if ticker in self.stocks.keys():
             self.stocks[ticker].update_quantity(quantity)
         else: 
@@ -111,6 +115,10 @@ class Portfolio:
         # d'historique pour chaque stock de la transaction 
 
     def update_portfolio_evolution(self):
-        pass
-
-    
+        
+        for period in self.periods:
+            total_stocks = pd.DataFrame()
+            for key, value in self.stocks.items():
+                total_stocks =pd.concat([total_stocks, value.dict_evolution[str(period)]['transaction_price_euro']*value.dict_evolution[str(period)]['quantity']], axis=1)
+                total_stocks['total_value'] = total_stocks.sum(axis=1)
+                self.dict_evolution[period] = pd.DataFrame(total_stocks['total_value'], columns = ['total_value'])
