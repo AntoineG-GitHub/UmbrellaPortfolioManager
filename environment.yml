@@ -38,4 +38,6 @@ dependencies:
       - urllib3==2.1.0
       - webencodings==0.5.1
       - yfinance==0.2.35
+      - Django
+      - djangorestframework
 prefix: C:\Users\Vince\anaconda3\envs\umbrella_env
