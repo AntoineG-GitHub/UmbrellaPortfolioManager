@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import include, re_path
 from rest_framework import routers
 
 from backend import views
@@ -19,9 +19,12 @@ router.register(r'actors-transaction', views.Actors_transactionViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
-urlpatterns = [
-    path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+urlpatterns = [    
+    re_path('signup', views.signup),
+    re_path('login',views.login),
+    re_path('test_token',views.test_token)
+
+    
     
 ]
 

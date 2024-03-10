@@ -7,7 +7,7 @@ from backend.models import Holder,Actors_transaction, Portfolio, Stock_Metadata,
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'groups']
+        fields = ['url', 'username','password', 'email', 'groups']
 class HolderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Holder
@@ -17,8 +17,6 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ['url', 'name']
 class PortfolioSerializer(serializers.HyperlinkedModelSerializer):
-    
-
     class Meta:
         model = Portfolio
         fields = ['id', 'name']
